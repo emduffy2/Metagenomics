@@ -1,0 +1,15 @@
+#Use either spades or megahit to assemble 
+
+spades.py --metagenome -1 forward_reads.fastq -2 reverse_reads.fastq -o OUTPUT_FOLDER
+
+megahit -1 forward_reads.fastq -2 reverse_reads.fastq -o OUTPUT_FOLDER
+
+
+#If you want to “look” at the assembly you can do this using a program called Bandage. 
+#It doesn’t do anything much except draw the assembly graph, but it’s helpful for visualizing what you have. 
+#Here is an example of how to prepare a file for use in Bandage
+
+#Need to convert a k-mer assembly fasta file to a fastg file:
+megahit_toolkit contig2fastg 21 k21.contigs.fa > k21.fastg
+
+
