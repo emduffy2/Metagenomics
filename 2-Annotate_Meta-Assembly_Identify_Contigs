@@ -1,0 +1,29 @@
+#Use prokka for annotation
+prokka --metagenome assembly.fasta
+
+
+#Statistics!
+  #use quast
+quast.py assembly.fasta
+
+#Meta-Assembly of many assembled contigs
+  #use canu
+
+#run collected assemblies through it:
+canu -p canu-contig4 -d canu-metagenome4 genomeSize=5m maxMemory=250G maxThreads=18 -pacbio-corrected all_the_contigs.fasta
+
+#Identifying contigs with Kaiju
+kaiju -t /database/nodes.dmp -f /database/db.fmi -i forward.fastq.gz -o output
+
+#Use krona to visualize the output of the assembly identification.
+  #import the taxonomy of the contigs using the NCBI standard taxonomic names:
+
+kaiju2krona -t database/nodes.dmp -n database/names.dmp -i output -o kaiju.out.krona
+
+#Now we draw the figure to visualize the output:
+ktImportText -o kaiju.out.html kaiju.out.krona
+
+#MetaPhlAn contig identification
+metaphlan.py --bowtie2db $METAPHLAN_BOWTIE_2 --input_type fasta assembly.fasta metaphlan_output_bowtie.txt
+metaphlan.py --blastdb $METAPHLAN_BLAST_DB --input_type multifasta assembly.fasta metaphlan_output_blast.txt
+
